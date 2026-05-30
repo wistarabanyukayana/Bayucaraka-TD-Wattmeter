@@ -1,0 +1,655 @@
+:root {
+  color-scheme: light;
+  --bg: #e8eef5;
+  --surface: #ffffff;
+  --surface-2: #dbe4ee;
+  --text: #07111d;
+  --muted: #374a5d;
+  --line: #9aa8b8;
+  --accent: #006746;
+  --accent-2: #006879;
+  --power: #5d2ec5;
+  --warn: #895600;
+  --danger: #921a12;
+  --button-fill: #ffffff;
+  --stop-fill: #ffebba;
+  --stop-text: #4b2e00;
+  --active-fill: #def7ec;
+  --stale-fill: #f4ead8;
+  --chart-fill-a: #ffffff;
+  --chart-fill-b: #ebf1f7;
+  --shadow: 0 2px 6px rgba(7, 17, 29, 0.16);
+  --chart-grid: rgba(55, 74, 93, 0.3);
+  --chart-axis: rgba(7, 17, 29, 0.82);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  height: 100%;
+  overflow: hidden;
+}
+
+html[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #101418;
+  --surface: #171d22;
+  --surface-2: #202830;
+  --text: #e8edf1;
+  --muted: #9aa8b3;
+  --line: #303b45;
+  --accent: #2fbf89;
+  --accent-2: #2ca6b8;
+  --power: #a78bfa;
+  --warn: #e0a447;
+  --danger: #f87171;
+  --button-fill: #1d252c;
+  --stop-fill: #332718;
+  --stop-text: #ffd48a;
+  --active-fill: #13241d;
+  --stale-fill: #241f18;
+  --chart-fill-a: #151b20;
+  --chart-fill-b: #11171b;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.28);
+  --chart-grid: rgba(154, 168, 179, 0.18);
+  --chart-axis: rgba(154, 168, 179, 0.78);
+}
+
+body {
+  margin: 0;
+  height: 100%;
+  min-width: 320px;
+  overflow: hidden;
+  background: var(--bg);
+  color: var(--text);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+button,
+select {
+  font: inherit;
+}
+
+button {
+  min-height: 40px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 0 14px;
+  background: var(--button-fill);
+  color: var(--text);
+  cursor: pointer;
+}
+
+button:hover:not(:disabled) {
+  border-color: var(--accent-2);
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.48;
+}
+
+select {
+  min-height: 40px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 0 34px 0 10px;
+  background: var(--surface);
+  color: var(--text);
+}
+
+.app-shell {
+  width: calc(100vw - clamp(20px, 2.4vw, 40px));
+  height: 100dvh;
+  margin: 0 auto;
+  padding: clamp(12px, 2vh, 20px) 0;
+  display: grid;
+  grid-template-rows: auto auto auto minmax(0, 1fr) auto;
+  gap: clamp(10px, 1.6vh, 14px);
+  min-height: 0;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 0;
+  min-height: 52px;
+}
+
+.brand-area {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+
+.brand-area > div {
+  min-width: 0;
+}
+
+h1 {
+  margin: 0;
+  font-size: 1.45rem;
+  line-height: 1.2;
+  letter-spacing: 0;
+}
+
+.subtle {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 0.86rem;
+}
+
+.actions,
+.record-controls,
+.chart-tools {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.icon-button {
+  width: 40px;
+  padding: 0;
+  font-size: 1.15rem;
+  line-height: 1;
+}
+
+#themeToggleBtn {
+  font-size: 1.05rem;
+}
+
+#connectBtn,
+#startRecordBtn {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: #fff;
+}
+
+#stopRecordBtn {
+  border-color: var(--warn);
+  background: var(--stop-fill);
+  color: var(--stop-text);
+}
+
+.status-band,
+.record-panel {
+  display: grid;
+  gap: 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.status-band {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  padding: 9px 10px;
+}
+
+.status-band > div,
+.record-stats > div {
+  min-width: 0;
+}
+
+.label {
+  display: block;
+  margin-bottom: 3px;
+  color: var(--muted);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.status-band strong,
+.record-stats strong {
+  display: block;
+  overflow: hidden;
+  color: var(--text);
+  font-size: 0.98rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chart-tools {
+  justify-content: flex-end;
+  min-width: 0;
+}
+
+.chart-tools > div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.chart-tools label {
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.chart-panel {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  min-height: 0;
+}
+
+.chart-panel.has-focus {
+  grid-template-columns: minmax(0, 2.2fr) minmax(180px, 0.8fr);
+  grid-template-rows: repeat(4, minmax(0, 1fr));
+}
+
+.chart-card {
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 10px;
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  border-top: 4px solid var(--power);
+  cursor: pointer;
+}
+
+.chart-card.is-focused {
+  grid-column: 1;
+  grid-row: 1 / -1;
+  cursor: default;
+}
+
+.chart-panel.has-focus .chart-card:not(.is-focused) {
+  grid-column: 2;
+  grid-row: auto;
+  min-height: 0;
+  padding: 6px;
+  grid-template-rows: auto minmax(0, 1fr);
+}
+
+.chart-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  min-height: 42px;
+  min-width: 0;
+}
+
+.chart-head strong {
+  display: block;
+  overflow: hidden;
+  font-size: clamp(1rem, 1.7vw, 1.32rem);
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.metric-detail {
+  display: block;
+  overflow: hidden;
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 0.74rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chart-focus-btn {
+  min-height: 28px;
+  padding: 0 9px;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.chart-card.is-focused .chart-focus-btn::before {
+  content: "Exit ";
+}
+
+.chart-panel.has-focus .chart-card:not(.is-focused) .chart-focus-btn {
+  display: none;
+}
+
+.chart-panel.has-focus .chart-card:not(.is-focused) .chart-head {
+  min-height: 28px;
+  overflow: hidden;
+}
+
+.chart-panel.has-focus .chart-card:not(.is-focused) .label {
+  overflow: hidden;
+  font-size: 0.58rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chart-panel.has-focus .chart-card:not(.is-focused) .chart-head strong {
+  font-size: 0.88rem;
+}
+
+.chart-panel.has-focus .chart-card:not(.is-focused) .metric-detail {
+  display: none;
+}
+
+.chart-panel.has-focus .chart-card:not(.is-focused) .chart-meta {
+  display: none;
+}
+
+.chart-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.chart-meta span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chart-card canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 92px;
+  max-height: none;
+  margin-top: 8px;
+  border-radius: 6px;
+  background: var(--chart-fill-b);
+}
+
+.chart-card.is-focused canvas {
+  min-height: 240px;
+}
+
+.chart-panel.has-focus .chart-card:not(.is-focused) canvas {
+  min-height: 0;
+  margin-top: 3px;
+}
+
+.chart-current {
+  border-top-color: var(--accent-2);
+}
+
+.chart-panel:not(.has-focus) .chart-current {
+  grid-column: 3 / 5;
+  grid-row: 1;
+}
+
+.chart-voltage {
+  border-top-color: var(--accent);
+}
+
+.chart-panel:not(.has-focus) .chart-voltage {
+  grid-column: 5 / 7;
+  grid-row: 1;
+}
+
+.chart-power {
+  border-top-color: var(--power);
+}
+
+.chart-panel:not(.has-focus) .chart-power {
+  grid-column: 1 / 3;
+  grid-row: 1;
+}
+
+.chart-amp-hour,
+.chart-watt-hour {
+  border-top-color: var(--warn);
+}
+
+.chart-panel:not(.has-focus) .chart-amp-hour {
+  grid-column: 1 / 4;
+  grid-row: 2;
+}
+
+.chart-panel:not(.has-focus) .chart-watt-hour {
+  grid-column: 4 / 7;
+  grid-row: 2;
+}
+
+.chart-card.is-active {
+  border-color: var(--accent);
+  background: var(--active-fill);
+}
+
+.chart-card.is-active .label::after {
+  content: " live";
+  margin-left: 6px;
+  color: var(--accent);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.record-panel {
+  grid-template-columns: minmax(0, 1.35fr) minmax(300px, 0.65fr);
+  align-items: center;
+  padding: 9px 10px;
+}
+
+.record-controls label {
+  color: var(--muted);
+  font-size: 0.84rem;
+  font-weight: 700;
+}
+
+.record-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  padding: 0;
+}
+
+.diagnostics {
+  grid-column: 1 / -1;
+  min-height: 22px;
+  overflow: hidden;
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-variant-numeric: tabular-nums;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.diagnostics.is-error {
+  color: var(--danger);
+}
+
+.diagnostics.is-ok {
+  color: var(--accent);
+}
+
+.is-connected #connectionState {
+  color: var(--accent);
+}
+
+.is-recording #recordState {
+  color: var(--danger);
+}
+
+.is-stale #connectionState {
+  color: var(--warn);
+}
+
+.is-stale .chart-card {
+  background: var(--stale-fill);
+}
+
+@media (max-width: 860px) {
+  .app-shell {
+    width: calc(100vw - 20px);
+    grid-template-rows: auto auto auto minmax(0, 1fr) auto;
+  }
+
+  .topbar,
+  .record-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .topbar {
+    display: grid;
+  }
+
+  .brand-area {
+    justify-content: space-between;
+  }
+
+  .status-band {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .chart-panel {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    grid-template-rows: repeat(2, minmax(0, 1fr));
+  }
+
+  .chart-panel.has-focus {
+    grid-template-columns: minmax(0, 1.65fr) minmax(140px, 0.85fr);
+    grid-template-rows: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 680px) {
+  html,
+  body {
+    overflow: auto;
+  }
+
+  .app-shell {
+    height: auto;
+    min-height: 100dvh;
+  }
+
+  .chart-panel,
+  .chart-panel.has-focus {
+    grid-template-columns: 1fr;
+    grid-template-rows: none;
+  }
+
+  .chart-card,
+  .chart-card.is-focused,
+  .chart-panel.has-focus .chart-card:not(.is-focused) {
+    grid-column: auto;
+    grid-row: auto;
+    min-height: 190px;
+  }
+
+  .chart-panel.has-focus .chart-card.is-focused {
+    min-height: 360px;
+  }
+
+  .chart-panel.has-focus .chart-card:not(.is-focused) .chart-meta,
+  .chart-panel.has-focus .chart-card:not(.is-focused) .metric-detail,
+  .chart-panel.has-focus .chart-card:not(.is-focused) .chart-focus-btn {
+    display: initial;
+  }
+}
+
+@media (max-height: 720px) and (min-width: 681px) {
+  button,
+  select {
+    min-height: 34px;
+  }
+
+  .app-shell {
+    padding: 8px 0;
+    gap: 7px;
+  }
+
+  h1 {
+    font-size: 1.2rem;
+  }
+
+  .subtle {
+    font-size: 0.78rem;
+  }
+
+  .status-band,
+  .record-panel {
+    padding: 7px 8px;
+  }
+
+  .status-band strong,
+  .record-stats strong {
+    font-size: 0.9rem;
+  }
+
+  .chart-card {
+    padding: 8px;
+  }
+
+  .chart-head {
+    min-height: 32px;
+  }
+
+  .chart-head strong {
+    font-size: 0.94rem;
+  }
+
+  .chart-meta {
+    margin-top: 2px;
+    font-size: 0.68rem;
+  }
+
+  .chart-card canvas {
+    min-height: 56px;
+    margin-top: 5px;
+  }
+
+  .chart-card.is-focused canvas {
+    min-height: 190px;
+  }
+}
+
+@media (max-width: 560px) {
+  .app-shell {
+    width: calc(100vw - 12px);
+    grid-template-rows: auto auto auto minmax(0, 1fr) auto;
+  }
+
+  .status-band,
+  .record-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .actions,
+  .record-controls,
+  .chart-tools {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .actions button,
+  .record-controls button,
+  .record-controls select,
+  .chart-tools select {
+    width: 100%;
+  }
+
+  .chart-tools > div {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 4px;
+  }
+}

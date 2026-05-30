@@ -1,0 +1,78 @@
+{
+  "name": "wattmeter-viewer",
+  "version": "1.1.1",
+  "author": "Wistara Banyu Kayana from Bayucaraka",
+  "private": true,
+  "description": "Cross-platform wattmeter viewer for the Arduino LCD sniffer.",
+  "main": "electron/main.js",
+  "scripts": {
+    "start": "electron .",
+    "check": "node scripts/check.js",
+    "package:dir": "node scripts/electron-builder.js --dir",
+    "package:dir:linux": "node scripts/electron-builder.js --linux --dir",
+    "package:dir:win": "node scripts/electron-builder.js --win --dir",
+    "dist": "node scripts/electron-builder.js",
+    "dist:linux": "node scripts/electron-builder.js --linux",
+    "dist:win": "node scripts/electron-builder.js --win"
+  },
+  "build": {
+    "appId": "com.bayucaraka.wattmeter-viewer",
+    "productName": "Wattmeter Viewer",
+    "npmRebuild": true,
+    "nodeGypRebuild": false,
+    "files": [
+      "electron/**/*",
+      "WattmeterViewer/**/*",
+      "drivers/**/*",
+      "package.json",
+      "!**/node_modules/@serialport/bindings-cpp/build/**/*",
+      "!**/node_modules/.pnpm/@serialport+bindings-cpp@*/node_modules/@serialport/bindings-cpp/build/**/*"
+    ],
+    "asarUnpack": [
+      "node_modules/@serialport/bindings-cpp/prebuilds/**/*",
+      "node_modules/.pnpm/@serialport+bindings-cpp@*/node_modules/@serialport/bindings-cpp/prebuilds/**/*"
+    ],
+    "extraResources": [
+      {
+        "from": "drivers",
+        "to": "drivers",
+        "filter": [
+          "**/*"
+        ]
+      }
+    ],
+    "directories": {
+      "output": "dist"
+    },
+    "linux": {
+      "target": [
+        "AppImage"
+      ],
+      "category": "Utility"
+    },
+    "win": {
+      "target": [
+        "nsis"
+      ]
+    },
+    "mac": {
+      "target": [
+        "dmg"
+      ]
+    }
+  },
+  "devDependencies": {
+    "electron": "latest",
+    "electron-builder": "latest"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@serialport/bindings-cpp",
+      "electron",
+      "electron-winstaller"
+    ]
+  },
+  "dependencies": {
+    "serialport": "^13.0.0"
+  }
+}

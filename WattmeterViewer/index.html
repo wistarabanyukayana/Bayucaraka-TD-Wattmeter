@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Wattmeter Viewer</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <div class="brand-area">
+          <div>
+            <h1>Wattmeter Viewer</h1>
+            <p id="supportStatus" class="subtle">Checking serial support...</p>
+          </div>
+          <button id="driverHelpBtn" type="button">Driver Help</button>
+        </div>
+        <div class="actions">
+          <select id="portSelect" class="port-picker" aria-label="Granted serial ports">
+            <option value="">No granted port</option>
+          </select>
+          <button id="refreshPortsBtn" class="icon-button" type="button" title="Refresh ports" aria-label="Refresh ports">&#8635;</button>
+          <button id="themeToggleBtn" class="icon-button" type="button" title="Switch theme" aria-label="Switch theme">&#9790;</button>
+          <button id="connectBtn" type="button">Connect</button>
+          <button id="disconnectBtn" type="button" disabled>Disconnect</button>
+        </div>
+      </header>
+
+      <section class="status-band" aria-label="Connection status">
+        <div>
+          <span class="label">Status</span>
+          <strong id="connectionState">Disconnected</strong>
+        </div>
+        <div>
+          <span class="label">Baud</span>
+          <strong>250000</strong>
+        </div>
+        <div>
+          <span class="label">Stream</span>
+          <strong id="streamRate">0.0 Hz</strong>
+        </div>
+        <div>
+          <span class="label">Last Update</span>
+          <strong id="lastUpdate">--</strong>
+        </div>
+        <div>
+          <span class="label">DROP</span>
+          <strong id="dropCount">0</strong>
+        </div>
+      </section>
+
+      <section class="chart-tools" aria-label="Chart options">
+        <div>
+          <label for="chartTimeframe">Time Frame</label>
+          <select id="chartTimeframe"></select>
+        </div>
+        <div>
+          <label for="energyUnit">Ah / Wh Unit</label>
+          <select id="energyUnit"></select>
+        </div>
+      </section>
+
+      <section class="chart-panel" aria-label="Live trend charts">
+        <article class="chart-card chart-current" data-chart="A">
+          <div class="chart-head">
+            <div>
+              <span class="label">Ampere (A)</span>
+              <strong id="valueA">--</strong>
+              <span id="maxA" class="metric-detail">Max: -- A</span>
+            </div>
+            <button class="chart-focus-btn" type="button" data-focus-chart="A">Focus</button>
+          </div>
+          <div class="chart-meta">
+            <span id="chartRangeA">--</span>
+            <span id="chartTimeRangeA">--</span>
+          </div>
+          <canvas id="chartA" width="440" height="180"></canvas>
+        </article>
+        <article class="chart-card chart-voltage" data-chart="V">
+          <div class="chart-head">
+            <div>
+              <span class="label">Voltage (V)</span>
+              <strong id="valueV">--</strong>
+              <span id="maxV" class="metric-detail">Max: -- V</span>
+            </div>
+            <button class="chart-focus-btn" type="button" data-focus-chart="V">Focus</button>
+          </div>
+          <div class="chart-meta">
+            <span id="chartRangeV">--</span>
+            <span id="chartTimeRangeV">--</span>
+          </div>
+          <canvas id="chartV" width="440" height="180"></canvas>
+        </article>
+        <article class="chart-card chart-power" data-chart="W">
+          <div class="chart-head">
+            <div>
+              <span class="label">Watt (W)</span>
+              <strong id="valueW">--</strong>
+              <span id="maxW" class="metric-detail">Max: -- W</span>
+            </div>
+            <button class="chart-focus-btn" type="button" data-focus-chart="W">Focus</button>
+          </div>
+          <div class="chart-meta">
+            <span id="chartRangeW">--</span>
+            <span id="chartTimeRangeW">--</span>
+          </div>
+          <canvas id="chartW" width="440" height="180"></canvas>
+        </article>
+        <article class="chart-card chart-amp-hour" data-chart="Ah">
+          <div class="chart-head">
+            <div>
+              <span id="labelAh" class="label">Ah</span>
+              <strong id="valueAh">--</strong>
+            </div>
+            <button class="chart-focus-btn" type="button" data-focus-chart="Ah">Focus</button>
+          </div>
+          <div class="chart-meta">
+            <span id="chartRangeAh">--</span>
+            <span id="chartTimeRangeAh">--</span>
+          </div>
+          <canvas id="chartAh" width="440" height="180"></canvas>
+        </article>
+        <article class="chart-card chart-watt-hour" data-chart="Wh">
+          <div class="chart-head">
+            <div>
+              <span id="labelWh" class="label">Wh</span>
+              <strong id="valueWh">--</strong>
+            </div>
+            <button class="chart-focus-btn" type="button" data-focus-chart="Wh">Focus</button>
+          </div>
+          <div class="chart-meta">
+            <span id="chartRangeWh">--</span>
+            <span id="chartTimeRangeWh">--</span>
+          </div>
+          <canvas id="chartWh" width="440" height="180"></canvas>
+        </article>
+      </section>
+
+      <section class="record-panel" aria-label="Recording controls">
+        <div class="record-controls">
+          <label for="recordHz">Record Rate</label>
+          <select id="recordHz">
+            <option value="1">1 Hz</option>
+            <option value="2">2 Hz</option>
+            <option value="5">5 Hz</option>
+            <option value="10" selected>10 Hz</option>
+            <option value="20">20 Hz</option>
+            <option value="50">50 Hz</option>
+          </select>
+          <button id="startRecordBtn" type="button" disabled>Start Record</button>
+          <button id="stopRecordBtn" type="button" disabled>Stop &amp; Save CSV</button>
+        </div>
+        <div class="record-stats">
+          <div>
+            <span class="label">Recording</span>
+            <strong id="recordState">Off</strong>
+          </div>
+          <div>
+            <span class="label">Rows</span>
+            <strong id="recordRows">0</strong>
+          </div>
+          <div>
+            <span class="label">Elapsed</span>
+            <strong id="recordElapsed">00:00.000</strong>
+          </div>
+        </div>
+        <div class="diagnostics" id="diagnostics" aria-live="polite">Diagnostics: ready</div>
+      </section>
+    </main>
+
+    <script type="module" src="src/main.js"></script>
+  </body>
+</html>

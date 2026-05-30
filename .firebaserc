@@ -1,0 +1,7 @@
+{
+  "projects": {
+    "default": "test-bench-td"
+  },
+  "targets": {},
+  "etags": {}
+}
